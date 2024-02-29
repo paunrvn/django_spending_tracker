@@ -1,3 +1,3 @@
 # DJANGO SPENDING TRACKER
-## Decriere
+## Descriere
 O aplicatie Django pentru a monitoriza cheltuielile utilizatorului
