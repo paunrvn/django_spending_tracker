@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spending app</title>
+</head>
+<body>
+<input type="date">
+<button type="button" class="btn btn-primary" onclick="getday()">Alege</button>
+<script>
+    function getday(){
+        day = document.querySelector("input")
+        if(day.value) {
+            url = "http://127.0.0.1:8000/?day=" + day.value
+            window.location.href = url
+        } else {
+            alert('Alege o zi')
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="date" id="start-date">
+<input type="date" id="end-date">
+<button type="button" class="btn btn-primary" onclick="getRangeData()">Afiseaza</button>
+<script>
+    function getRangeData(){
+    start_date = document.querySelector("#start-date").value
+    end_date = document.querySelector("#end-date").value
+    url = "http://127.0.0.1:8000/?start_date=" + start_date + "&end_date=" + end_date
+    window.location.href = url
+    }
+</script>
+
+</body>
+</html>
