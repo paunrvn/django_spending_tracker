@@ -7,6 +7,7 @@ class Expense(models.Model):
     vendor = models.TextField()
     icon = models.TextField()
     image = models.ImageField(upload_to='images/')
+    category = models.TextField()
 
     def __str__(self):
         return f'[{self.amount}]:{self.data} - {self.vendor}'
