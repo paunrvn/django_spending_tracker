@@ -28,18 +28,34 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Icon</label>
-                <input value="{{spending.icon}}" class="form-control" type="text" name="icon">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Image</label>
-                <input value="{{spending.image}}" class="form-control" type="file" name="image">
+                <label class="form-label">Description</label>
+                <input value="{{spending.description}}" class="form-control" type="text" name="description">
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Category</label>
-                <input value="{{spending.category}}" class="form-control" type="text" name="category">
+                <select class="form-select" name="category">
+                {% for category in categories %}
+                {% if category.name == spending.category.name %}
+                <option value="{{category.id}}" selected>{{category.name}}</option>
+                {% else %}
+                <option value="{{category.id}}">{{category.name}}</option>
+                {% endif %}
+            {% endfor %}
+            </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Vendor</label>
+                <select class="form-select" name="vendor">
+                {% for vendor in vendors %}
+                {% if vendor.name == spending.vendor.name %}
+                <option value="{{vendor.id}}" selected>{{vendor.name}}</option>
+                {% else %}
+                <option value="{{vendor.id}}">{{vendor.name}}</option>
+                {% endif %}
+            {% endfor %}
+            </select>
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

@@ -1,6 +1,6 @@
 from django.http import  HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from .models import Expense
+from .models import Expense, Category, Vendor
 from .forms import ExpenseForm
 from datetime import datetime, timedelta
 import csv
@@ -20,15 +20,15 @@ def spending(request):
 
     # Week button
     elif request.GET.get('week'):
-        value =  request.GET.get('week')
+        value = request.GET.get('week')
         year, week_number = map(int, value.split("-W"))
-        start_of_week =  datetime.strptime(f'{year}-W{week_number}-1','%Y-W%W-%w').date()
+        start_of_week = datetime.strptime(f'{year}-W{week_number}-1','%Y-W%W-%w').date()
         end_of_week = start_of_week + timedelta(days=6)
         spendings = Expense.objects.filter(data__range=[start_of_week, end_of_week]).order_by('data')
 
     # "Select day" button
     elif request.GET.get('day'):
-        value =  request.GET.get('day')
+        value = request.GET.get('day')
         spendings = Expense.objects.filter(data=value).order_by('data')
 
     # "Select range" button
@@ -42,10 +42,11 @@ def spending(request):
         spendings = Expense.objects.all()
         category = request.GET.get("category")
         if category:
-            spendings = Expense.objects.filter(category=category).all()
+            spendings = Expense.objects.filter(category__pk=category)
 
-    spendings_category = Expense.objects.all()
-    categories = {spending.category for spending in spendings_category}
+    categories = Category.objects.all()
+    vendors = Vendor.objects.all()
+
 
     now = datetime.now()
     today = {
@@ -75,8 +76,10 @@ def adauga(request):
     # Cand utilizatorul acceseaza url/adauga, se va crea un obiect de tip form
     # si se va trimite spre template-ul html pentru randare
     if request.method == 'GET':
+        categories = Category.objects.all()
+        vendors = Vendor.objects.all()
         form = ExpenseForm()
-        return render(request, "adauga.html", {"form": form})
+        return render(request, "adauga.html", {"form": form, "categories": categories, "vendors": vendors})
     # Request-urile de tip POST care vin pe url/adauga sunt facute sa fie procesate
     # si adaugate in baza de date
     elif request.method == 'POST':
@@ -113,14 +116,12 @@ def edit(request,id):
     spending = Expense.objects.filter(id=id).first()
     data_edit = spending.data.strftime("%Y-%m-%d")
     if request.method == 'GET':
-        return render(request, "edit.html",{"spending":spending,"data":data_edit})
+        categories = Category.objects.all()
+        vendors = Vendor.objects.all()
+        return render(request, "edit.html",{"spending":spending,"data":data_edit,"categories":categories,"vendors":vendors})
 
     elif request.method == 'POST':
-        form = ExpenseForm(request.POST, request.FILES,instance=spending)
-        file = request.FILES.get("image")
-        if not file:
-            request.FILES.update({"image":spending.image})
-            form = ExpenseForm(request.POST, request.FILES,instance=spending)
+        form = ExpenseForm(request.POST,instance=spending)
         print(form.is_valid())
         if form.is_valid():
             form.save()
