@@ -21,3 +21,7 @@ class Expense(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     def __str__(self):
         return f'[{self.data}]: {self.amount} - {self.category.name} - {self.vendor.name}'
+
+{
+    
+}
